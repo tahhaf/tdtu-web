@@ -4,7 +4,7 @@
     "builder": "RAILPACK"
   },
   "deploy": {
-    "startCommand": "sh -c 'if [ -z \"$PORT\" ]; then PORT=8000; fi; case \"$RAILWAY_SERVICE_NAME\" in websocket) if [ -z \"$SOCKET_PORT\" ]; then SOCKET_PORT=\"$PORT\"; fi; export SOCKET_PORT; php config/socket-server.php ;; *) php config/init.php && php -S \"0.0.0.0:$PORT\" index.php ;; esac'",
+    "startCommand": "sh -c 'if [ -z \"$PORT\" ]; then PORT=8000; fi; case \"$RAILWAY_SERVICE_NAME\" in websocket) SOCKET_PORT=\"$PORT\"; export SOCKET_PORT; php config/socket-server.php ;; *) php config/init.php && php -S \"0.0.0.0:$PORT\" index.php ;; esac'",
     "restartPolicyType": "ON_FAILURE"
   }
 }
