@@ -4,8 +4,54 @@ require_once __DIR__ . '/../services/NoteSocket.php';
 
 use Ratchet\Server\IoServer;
 use Ratchet\Http\HttpServer;
+use Ratchet\Http\HttpServerInterface;
 use Ratchet\WebSocket\WsServer;
+use Ratchet\ConnectionInterface;
 use App\Services\NoteSocket;
+use Psr\Http\Message\RequestInterface;
+
+class HttpWsRouter implements HttpServerInterface
+{
+    private WsServer $wsServer;
+
+    public function __construct(WsServer $wsServer)
+    {
+        $this->wsServer = $wsServer;
+    }
+
+    public function onOpen(ConnectionInterface $conn, RequestInterface $request = null)
+    {
+        if ($request && strtolower($request->getHeaderLine('Upgrade')) === 'websocket') {
+            return $this->wsServer->onOpen($conn, $request);
+        }
+
+        $body = "WebSocket server is running\n";
+        $conn->send(
+            "HTTP/1.1 200 OK\r\n" .
+            "Content-Type: text/plain; charset=utf-8\r\n" .
+            "Content-Length: " . strlen($body) . "\r\n" .
+            "Connection: close\r\n" .
+            "\r\n" .
+            $body
+        );
+        $conn->close();
+    }
+
+    public function onMessage(ConnectionInterface $from, $msg)
+    {
+        $this->wsServer->onMessage($from, $msg);
+    }
+
+    public function onClose(ConnectionInterface $conn)
+    {
+        $this->wsServer->onClose($conn);
+    }
+
+    public function onError(ConnectionInterface $conn, \Exception $e)
+    {
+        $this->wsServer->onError($conn, $e);
+    }
+}
 
 // Manual .env loader for the socket server
 $envPath = __DIR__ . '/../.env';
@@ -28,8 +74,10 @@ $conn = $database->connect();
 
 $server = IoServer::factory(
     new HttpServer(
-        new WsServer(
-            new NoteSocket($conn)
+        new HttpWsRouter(
+            new WsServer(
+                new NoteSocket($conn)
+            )
         )
     ),
     $port
