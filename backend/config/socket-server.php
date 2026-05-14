@@ -18,7 +18,7 @@ if (file_exists($envPath)) {
     }
 }
 
-$port = getenv('PORT') ?: getenv('SOCKET_PORT') ?: 8081;
+$port = getenv('SOCKET_PORT') ?: 8081;
 echo "Attempting to start WebSocket server on port {$port}...\n";
 
 require_once __DIR__ . '/../core/Database.php';
