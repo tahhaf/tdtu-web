@@ -1,0 +1,7 @@
+/vendor/
+.env
+*.log
+emails.log
+/storage/*.log
+.DS_Store
+Thumbs.db

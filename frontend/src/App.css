@@ -1,0 +1,681 @@
+:root {
+  /* System Tokens */
+  --primary-color: #0d6efd;
+  --secondary-bg: #f8f9fa;
+  --sidebar-width: 250px;
+  --header-height: 64px;
+  --transition-speed: 0.25s;
+
+  /* Semantic Tokens (Light Default) */
+  --app-bg: #fafbfd;
+  --card-bg: #ffffff;
+  --text-main: #212529;
+  --border-color: #dee2e6;
+  --sidebar-bg: #ffffff;
+
+  --global-font-size: 16px;
+}
+
+/* ============================================================ 
+   DARK MODE OVERRIDES
+   Applied via body class 'dark-theme'
+   ============================================================ */
+body.dark-theme,
+[data-theme="dark"] {
+  --app-bg: #121212;
+  --card-bg: #1e1e1e;
+  --text-main: #f0f0f0;
+  --border-color: #333333;
+  --sidebar-bg: #1e1e1e;
+  color-scheme: dark;
+}
+
+body.dark-theme .text-muted,
+[data-theme="dark"] .text-muted {
+  color: #a1a1aa !important;
+}
+
+body.dark-theme .form-control,
+[data-theme="dark"] .form-control,
+body.dark-theme .form-select,
+[data-theme="dark"] .form-select {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: #f0f0f0;
+}
+
+body.dark-theme .form-control:focus,
+[data-theme="dark"] .form-control:focus,
+body.dark-theme .form-select:focus,
+[data-theme="dark"] .form-select:focus {
+  background-color: #2a2a2a;
+  border-color: var(--primary-color);
+  color: #ffffff;
+}
+
+/* ============================================================ 
+   DARK MODE
+   ============================================================ */
+
+.app-navbar-dark {
+  background-color: var(--sidebar-bg) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+body.dark-theme .card,
+[data-theme="dark"] .card {
+  background-color: var(--card-bg) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-theme .card-header,
+[data-theme="dark"] .card-header {
+  background-color: transparent !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+body.dark-theme .bg-light,
+[data-theme="dark"] .bg-light {
+  background-color: #2a2a2a !important;
+  color: var(--text-main) !important;
+}
+
+body.dark-theme input[type="number"]::-webkit-inner-spin-button,
+[data-theme="dark"] input[type="number"]::-webkit-inner-spin-button {
+  filter: invert(0.85) hue-rotate(180deg);
+}
+
+/* ============================================================ 
+
+   BASE ELEMENT STYLING
+   ============================================================ */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--app-bg);
+  color: var(--text-main);
+  font-size: var(--global-font-size);
+  transition: background-color 0.3s, color 0.3s;
+  overflow-x: hidden;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb {
+  background: #444;
+}
+
+/* ============================================================ 
+   LAYOUT SHELL (Sidebar + Main)
+   ============================================================ */
+.app-shell {
+  display: flex;
+  min-height: calc(100vh - var(--header-height));
+}
+
+.app-sidebar {
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border-color);
+  padding: 1.5rem 0;
+  flex-shrink: 0;
+  transition: transform var(--transition-speed) ease;
+}
+
+.app-main {
+  flex-grow: 1;
+  padding: 1.5rem;
+  transition: padding var(--transition-speed);
+  position: relative;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1500;
+  backdrop-filter: blur(2px);
+}
+
+.sidebar-overlay.visible {
+  display: block;
+}
+
+/* ============================================================ 
+   COMPONENTS: SIDEBAR ITEMS
+   ============================================================ */
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  color: var(--text-main);
+  text-decoration: none;
+  border-radius: 0 50px 50px 0;
+  margin-right: 1.5rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.sidebar-nav-item:hover {
+  background: rgba(13, 110, 253, 0.08);
+  color: var(--primary-color);
+  opacity: 1;
+}
+
+.sidebar-nav-item.active {
+  background: rgba(13, 110, 253, 0.12);
+  color: var(--primary-color);
+  opacity: 1;
+}
+
+/* ============================================================ 
+   COMPONENTS: NOTE CARDS & GRID
+   ============================================================ */
+.note-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.note-card-ui {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+
+.note-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: auto;
+}
+
+.note-action-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 24px;
+  height: 24px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease;
+  z-index: 11;
+}
+
+.note-action-btn:hover {
+  transform: scale(1.1);
+  opacity: 0.7;
+}
+
+.note-action-btn:hover {
+  opacity: 0.7;
+}
+
+.note-card-ui:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.shared-note-item .note-card-ui {
+  height: auto !important;
+}
+
+/* Global Preference Note Colors (ID 8) */
+[data-preference-color="blue"] .note-card-ui {
+  border-top: 3px solid #0d6efd;
+}
+
+[data-preference-color="green"] .note-card-ui {
+  border-top: 3px solid #198754;
+}
+
+[data-preference-color="yellow"] .note-card-ui {
+  border-top: 3px solid #ffc107;
+}
+
+[data-preference-color="red"] .note-card-ui {
+  border-top: 3px solid #dc3545;
+}
+
+.note-pinned-ui {
+  /* No special border, identified by pin icon */
+}
+
+.note-editor {
+  background: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+.note-editor-title,
+.note-editor-textarea {
+  background: transparent !important;
+  color: var(--text-main) !important;
+}
+
+.note-editor-textarea {
+  min-height: 180px;
+}
+
+.note-editor-toolbar,
+.shared-note-meta {
+  gap: 1rem;
+}
+
+.note-editor-actions,
+.note-editor-status {
+  flex-wrap: wrap;
+}
+
+.note-settings-panel {
+  background: rgba(248, 249, 250, 0.95) !important;
+}
+
+.note-editor-share-row {
+  flex-wrap: wrap;
+}
+
+.note-editor-share-row .form-control,
+.note-editor-share-row .note-editor-role-select {
+  min-width: 0;
+}
+
+.note-editor-share-row .form-control {
+  flex: 1 1 240px;
+}
+
+.note-editor-role-select {
+  flex: 0 0 140px;
+}
+
+/* ============================================================ 
+   MODALS & OVERLAYS
+   ============================================================ */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 16px !important;
+  width: 90% !important;
+  max-width: 450px !important;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ============================================================ 
+   NAVBAR & SEARCH
+   ============================================================ */
+.navbar {
+  height: var(--header-height);
+  padding: 0;
+  display: flex !important;
+  align-items: center;
+}
+
+.search-container-ui {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 500px;
+  width: 100%;
+  height: 40px !important;
+}
+
+.search-container-ui:focus-within {
+  border-color: var(--primary-color);
+}
+
+.search-container-ui input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  outline: none;
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+.view-mode-group-ui {
+  height: 40px !important;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.view-mode-group-ui .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem !important;
+  font-size: 0.85rem;
+  height: 100% !important;
+  border: none !important;
+  line-height: 1;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state-ui {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-main);
+  opacity: 0.55;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  opacity: 0.4;
+  max-width: 320px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.offline-status-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.network-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.network-badge-online {
+  background: rgba(25, 135, 84, 0.12);
+  color: #198754;
+}
+
+.network-badge-offline {
+  background: rgba(220, 53, 69, 0.12);
+  color: #dc3545;
+}
+
+.shared-note-notice {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: min(100%, 620px);
+  margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+  background: var(--card-bg);
+  border: 1px solid rgba(13, 110, 253, 0.22);
+  border-left: 4px solid var(--primary-color);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================================ 
+   FLOATING ACTION BUTTON (FAB)
+   ============================================================ */
+.fab-btn-ui {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border: none;
+  cursor: pointer;
+  z-index: 1000;
+  transition: opacity 0.2s;
+}
+
+.fab-btn-ui:hover {
+  opacity: 0.9;
+}
+
+/* ============================================================ 
+   RESPONSIVE OVERRIDES
+   ============================================================ */
+@media (max-width: 992px) {
+  .app-sidebar {
+    position: fixed;
+    left: -250px;
+    height: 100%;
+    z-index: 2000;
+    border-right: 1px solid var(--border-color);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .app-sidebar.mobile-open {
+    left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    padding: 1rem;
+  }
+
+  .note-grid-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .fab-btn-ui {
+    width: 50px;
+    height: 50px;
+    bottom: 2rem;
+    right: 2rem;
+  }
+
+  .note-editor {
+    padding: 1rem !important;
+  }
+
+  .note-editor-toolbar,
+  .shared-note-meta {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+
+  .note-editor-actions,
+  .note-editor-status {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .note-editor-share-row {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+
+  .note-editor-role-select,
+  .note-editor-share-row .btn {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .search-container-ui {
+    padding: 0.55rem 0.9rem;
+  }
+
+  .offline-status-row {
+    align-items: flex-start;
+  }
+
+  .note-card-ui {
+    padding: 1rem;
+  }
+
+  .fab-btn-ui {
+    bottom: 1.25rem;
+    right: 1.25rem;
+  }
+}
+
+/* ============================================================ 
+   NEW: ANIMATED SETTINGS SECTIONS
+   ============================================================ */
+.settings-panel-anim {
+  animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.action-btn-ui {
+  padding: 0.4rem 0.75rem !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.action-btn-ui:hover {
+  background-color: rgba(13, 110, 253, 0.08) !important;
+  color: var(--primary-color) !important;
+}
+
+.action-btn-ui.active {
+  background-color: rgba(13, 110, 253, 0.12) !important;
+  color: var(--primary-color) !important;
+  font-weight: 600;
+}
+
+/* ============================================================
+   AUTH LAYOUT
+   ============================================================ */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background-color: var(--bg);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  border: 0;
+  border-radius: 14px;
+}
+
+.auth-card-body {
+  padding: 28px;
+}
+
+.auth-title {
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.auth-subtitle {
+  margin-bottom: 0;
+  color: var(--gray);
+}
+
+.auth-switch {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 6px;
+  line-height: 1.25;
+}
+
+.auth-link-btn {
+  padding: 0 !important;
+  margin: 0;
+  line-height: inherit;
+  vertical-align: baseline;
+}
+
+@media (min-width: 768px) {
+  .auth-card-body {
+    padding: 40px;
+  }
+}
