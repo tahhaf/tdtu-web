@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "sh -c 'if [ \"$RAILWAY_SERVICE_NAME\" = \"websocket\" ]; then php config/socket-server.php; else php config/init.php && php -S 0.0.0.0:$PORT index.php; fi'",
+    "startCommand": "php config/init.php && php -S 0.0.0.0:$PORT index.php",
     "restartPolicyType": "ON_FAILURE"
   }
 }
