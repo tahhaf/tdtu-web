@@ -1,4 +1,14 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
+function getApiBaseUrl() {
+  const configuredUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
+
+  if (!configuredUrl || /^wss?:\/\//i.test(configuredUrl)) {
+    return "/api";
+  }
+
+  return configuredUrl.replace(/\/$/, "");
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 export async function request(url, options = {}) {
   const response = await fetch(`${API_BASE_URL}${url}`, {
