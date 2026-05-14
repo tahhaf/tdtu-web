@@ -3,7 +3,14 @@ function normalizeWebSocketUrl(url) {
     return "";
   }
 
-  return url
+  const trimmedUrl = url.trim();
+
+  if (!/^https?:\/\//i.test(trimmedUrl) && !/^wss?:\/\//i.test(trimmedUrl)) {
+    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+    return `${protocol}${trimmedUrl.replace(/\/$/, "")}`;
+  }
+
+  return trimmedUrl
     .replace(/^http:\/\//, "ws://")
     .replace(/^https:\/\//, "wss://")
     .replace(/\/$/, "");
